@@ -5,6 +5,14 @@ import os
 import json
 
 
+from datetime import datetime
+now = datetime.now()
+current_time = now.strftime("%H%m")
+
+
+
+
+
 
 
 def timeout(secs):
@@ -21,7 +29,7 @@ def clear():
 
 
 #intro
-print("Phone Tracer 1.0")
+print("Phone Tracer 1.1")
 print("Developed by Mutiny27")
 timeout(1.5)
 clear()
@@ -76,6 +84,7 @@ cell_type = response_json.get('line_type', "")
 
 if valid_confirm_loop=='valid':
     clear()
+    print(phone_number)
     print('Number is Valid')
     print('Country Prefix: ' + country_prefix)
     print('Country code: ' + country_code)
@@ -83,7 +92,23 @@ if valid_confirm_loop=='valid':
     print("City: " + city)
     print("Carrier: " + carrier)
     print("Landlane or Mobile: " + cell_type)
-    input("Press Enter to Continue...")
+    save = input("Would you like this saved to a file? (Y/N): ")
+
+    if save == "y":
+        try:
+            f = open("PhoneTrace"+city+country_code+".txt", "w+")
+            f.write(phone_number)
+            f.write("\nNumber is Valid")
+            f.write("\nCountry Prefix: " + country_prefix)
+            f.write("\nCountry Code:" + country_code)
+            f.write("\nCountry Name: " + country_name)
+            f.write("\nCity: " + city)
+            f.write("\nCarrier: " + carrier)
+            f.write("\nLandlane or Mobile: " + cell_type)
+            timeout(1.5)
+            f.close()
+        except FileExistsError:
+            print("You've already scanned this number, no need to save it")
 
 
 
