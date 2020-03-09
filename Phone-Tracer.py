@@ -98,7 +98,7 @@ def clear():
 
 #intro
 clear()
-print("Phone Tracer 1.3.0b5")
+print("Phone Tracer 1.3.0b6")
 print("Developed by Mutiny27")
 print("Note: The spam caller feature is in beta and may not provide fully accurate information")
 #print("Note: The name finder feature may not be 100% accurate, In testing it's been found to be mostly accurate")
@@ -115,6 +115,7 @@ except FileNotFoundError:
     with open('PTracerAPI', "w") as f:
         f.write(TracerApi_Key);
         f.close()
+        os.system("python3 Phone-Tracer.py")
 
 #main menu
 clear()
