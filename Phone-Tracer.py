@@ -97,8 +97,38 @@ def clear():
 
 
 #intro
+version = "1.3.0 beta 7"
+updateLoop = False
+updateCounter = 0
 clear()
-print("Phone Tracer 1.3.0b6")
+print("Checking for updates...")
+
+clear()
+try:
+    url = 'https://github.com/rshelver/Phone-Tracer'
+
+    response = requests.get(url)
+#print(response.content)
+#print(response.text)
+
+    if not("Updated to " + version in response.text):
+        updateLoop = True
+        while updateLoop == True:
+            if updateCounter == 0:
+                print("update required")
+                print("https://github.com/rshelver/Phone-Tracer")
+                updateCounter = updateCounter+1
+            else:
+                pass
+
+except:
+    print("Requires internet to run...")
+    print("Goodbye")
+    timeout(2.2)
+    quit()
+
+
+print("Phone Tracer " + version)
 print("Developed by Mutiny27")
 print("Note: The spam caller feature is in beta and may not provide fully accurate information")
 #print("Note: The name finder feature may not be 100% accurate, In testing it's been found to be mostly accurate")
@@ -118,6 +148,7 @@ except FileNotFoundError:
         os.system("python3 Phone-Tracer.py")
 
 #main menu
+
 clear()
 print('Phone Tracer')
 print('[1] Trace Phone Number')
@@ -167,6 +198,8 @@ if main_menu_choice=='1':
         unknow_risk_level = False
 
 
+if main_menu_choice=='0':
+    quit()
 
 
 response_json = json.loads(response.content)
@@ -200,14 +233,3 @@ if valid_confirm_loop=='valid':
 
     if save == "y":
         write(validStatus)
-
-
-
-
-
-
-
-
-
-if main_menu_choice=='0':
-    quit()
