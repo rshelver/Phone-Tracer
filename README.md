@@ -6,4 +6,4 @@ I also want to add support for searching the number and getting the name of the 
 
 # Usage:
 
-When asked for number first enter the country code with the "+" then hit space and type the rest of the number`
+Follow the instructions in the program
