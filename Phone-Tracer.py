@@ -97,7 +97,7 @@ def clear():
 
 
 #intro
-version = "1.3.0 beta 7"
+version = "1.3.0 beta 8"
 updateLoop = False
 updateCounter = 0
 clear()
@@ -105,13 +105,13 @@ print("Checking for updates...")
 
 clear()
 try:
-    url = 'https://github.com/rshelver/Phone-Tracer'
+    url = 'https://github.com/rshelver/Phone-Tracer/blob/master/Phone-Tracer.py'
 
     response = requests.get(url)
 #print(response.content)
 #print(response.text)
 
-    if not("Updated to " + version in response.text):
+    if not(version in response.text):
         updateLoop = True
         while updateLoop == True:
             if updateCounter == 0:
