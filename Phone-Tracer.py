@@ -146,6 +146,7 @@ except FileNotFoundError:
         f.write(TracerApi_Key);
         f.close()
         os.system("python3 Phone-Tracer.py")
+        quit()
 
 #main menu
 
