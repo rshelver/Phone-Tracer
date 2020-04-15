@@ -97,7 +97,7 @@ def clear():
 
 
 #intro
-version = "1.3.0 beta 9"
+version = "1.3.0 beta 10"
 updateLoop = False
 updateCounter = 0
 clear()
@@ -132,9 +132,9 @@ print("Phone Tracer " + version)
 print("Developed by Mutiny27")
 print("Note: The spam caller feature is in beta and may not provide fully accurate information")
 #print("Note: The name finder feature may not be 100% accurate, In testing it's been found to be mostly accurate")
-print("Press Enter to continue...")
-input()
+input("Press Enter to continue...")
 clear()
+
 
 #API START
 try:
@@ -155,6 +155,7 @@ print('[1] Trace Phone Number')
 print('[0] Quit')
 main_menu_choice=input('Enter one of the options: ')
 clear()
+
 
 
 if main_menu_choice=='1':
