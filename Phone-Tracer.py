@@ -97,7 +97,7 @@ def clear():
 
 
 #intro
-version = "1.3.0 beta 8"
+version = "1.3.0 beta 9"
 updateLoop = False
 updateCounter = 0
 clear()
@@ -201,8 +201,8 @@ if main_menu_choice=='1':
 if main_menu_choice=='0':
     quit()
 
-
-response_json = json.loads(response.content)
+response_json = requests.get(url).json()
+# response_json = json.loads(response.content)
 country_prefix = response_json.get('country_prefix', "")
 country_code_out = response_json.get('country_code', "")
 country_name = response_json.get('country_name', "")
