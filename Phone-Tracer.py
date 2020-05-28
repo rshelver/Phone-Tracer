@@ -4,12 +4,20 @@ import time
 import os
 import json
 import webbrowser
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
 
 
-from datetime import datetime
-now = datetime.now()
-current_time = now.strftime("%H%m")
-valid_confirm_loop = "null"
+def timeout(secs):
+    time.sleep(secs)
+
+def clear():
+    if platform.system()=='Windows':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+
 
 low_risk_check = False
 medium_risk_check = False
@@ -17,6 +25,15 @@ high_risk_check = False
 unknow_risk_level = True
 
 validStatus = 0 # 0 = null, 1 = Valid in-state, 2 = international unconfirmed.
+
+
+
+chrome_options = Options()
+chrome_options.add_argument("--headless")
+
+
+
+
 
 
 def checkInternational ():
@@ -51,7 +68,11 @@ def write(validStatus):
     try:
         if validStatus == 1:
             f = open("PhoneTrace.txt", "a+")
-            f.write("\n\n\n\n" + country_code +" "+ phone_number)
+            if country_code == "+1":
+                f.write("\n\n\n\nName: " + name)
+            else:
+                f.write("\n\n\n")
+            f.write("\n" + country_code +" "+ phone_number)
             f.write("\nNumber is Valid")
             f.write("\nCountry Prefix: " + country_prefix)
             f.write("\nCountry Code:" + country_code_out)
@@ -83,21 +104,13 @@ def write(validStatus):
 
 
 
-def timeout(secs):
-    time.sleep(secs)
-
-def clear():
-    if platform.system()=='Windows':
-        os.system('cls')
-    else:
-        os.system('clear')
 
 
 
 
 
 #intro
-version = "1.3.0 beta 10"
+version = "1.4.0"
 updateLoop = False
 updateCounter = 0
 clear()
@@ -130,8 +143,8 @@ except:
 
 print("Phone Tracer " + version)
 print("Developed by Mutiny27")
-print("Note: The spam caller feature is in beta and may not provide fully accurate information")
-#print("Note: The name finder feature may not be 100% accurate, In testing it's been found to be mostly accurate")
+print("Note: The name finder feature is in beta and may not provide fully accurate information")
+# print("Note: The name finder feature may not be 100% accurate, In testing it's been found to be mostly accurate")
 input("Press Enter to continue...")
 clear()
 
@@ -139,16 +152,33 @@ clear()
 #API START
 try:
     f = open('PTracerAPI', 'r')
-    access_key = f.read()
+    for line in f:
+        if "API: " in line:
+            access_key = line[5:-1]
+            break
+    print("key: " + access_key)
 except FileNotFoundError:
     TracerApi_Key = input('Enter your API key for Numverify: ')
+    ChromeDriver74 = input("Enter the directory to ChromeDriver 74 or lower: ")
     with open('PTracerAPI', "w") as f:
-        f.write(TracerApi_Key);
+        f.write("API: " + TracerApi_Key);
+        f.write("\nchrome dir: " + ChromeDriver74)
         f.close()
         os.system("python3 Phone-Tracer.py")
         quit()
 
+#ChromeDriver INIT
+try:
+    f = open("PTracerAPI", "r")
+    for line in f:
+        if "chrome dir:" in line:
+            chromeDir = line[12:]
+            print("ChromeDriver: " + chromeDir)
+    driver = webdriver.Chrome(chromeDir,   options=chrome_options)
+except FileNotFoundError:
+    quit(8888)
 #main menu
+
 
 clear()
 print('Phone Tracer')
@@ -165,6 +195,33 @@ if main_menu_choice=='1':
     phone_number=input('Enter the Phone Number you wish to trace: ')
     url = 'http://apilayer.net/api/validate?access_key=' + access_key + '&number=' + country_code + phone_number
     response = requests.get(url)
+
+    if "+1" == country_code:
+
+        driver.get("https://www.spydialer.com/")
+        number = driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_SearchInputTextBox"]')
+
+        submit = driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_SearchImageButton"]')
+
+        number.send_keys(phone_number)
+        time.sleep(1)
+        submit.click()
+        time.sleep(5)
+        secondSubmit = driver.find_element_by_xpath('//*[@id="ctl00_ContentPlaceHolder1_SearchCellImageButton"]')
+        secondSubmit.click()
+
+        nameSRC = driver.page_source
+        if "ctl00_ContentPlaceHolder1_NameLinkButton" in nameSRC:
+            nameLoc = nameSRC.find('''href="javascript:__doPostBack('ctl00$ContentPlaceHolder1$NameLinkButton','')">''')
+            name = nameSRC[nameLoc:nameLoc + 140]
+            name = name.replace('''href="javascript:__doPostBack('ctl00$ContentPlaceHolder1$NameLinkButton','')">''',
+                                "")
+            name = name.replace("</a>", "")
+            name = name.replace(" ", "-", 1)
+            name = name.replace(" ", "", -1)
+            name = name.replace("-", " ")
+
+        # print("name:", name)
 #    print(response.content)
 #    valid_check = response.content[9:13]
 #    print(valid_check)
@@ -212,6 +269,10 @@ city = response_json.get('location', "")
 carrier = response_json.get('carrier', "")
 cell_type = response_json.get('line_type', "")
 
+
+
+
+
 if "Sprint" in carrier:
     carrier = "Tmobile"
 
@@ -219,6 +280,10 @@ if "Sprint" in carrier:
 
 if valid_confirm_loop=='valid':
     clear()
+    if country_code == "+1":
+        print("Name: " + name)
+    else:
+        print("Name: not yet supported for international numbers")
     print(country_code+ " " + phone_number)
     print('Number is Valid')
     print('Country Prefix: ' + country_prefix)
