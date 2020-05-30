@@ -110,7 +110,7 @@ def write(validStatus):
 
 
 #intro
-version = "1.4.0"
+version = "1.4.1"
 updateLoop = False
 updateCounter = 0
 clear()
@@ -128,9 +128,13 @@ try:
         updateLoop = True
         while updateLoop == True:
             if updateCounter == 0:
-                print("update required")
+                print("update reccomended")
                 print("https://github.com/rshelver/Phone-Tracer")
-                updateCounter = updateCounter+1
+                print("Update menu will close in 10 seconds")
+                for i in range(10,0,-1):
+                    print(i)
+                    time.sleep(1)
+                updateLoop = False
             else:
                 pass
 
@@ -140,7 +144,7 @@ except:
     timeout(2.2)
     quit()
 
-
+clear()
 print("Phone Tracer " + version)
 print("Developed by Mutiny27")
 print("Note: The name finder feature is in beta and may not provide fully accurate information")
@@ -211,6 +215,7 @@ if main_menu_choice=='1':
         secondSubmit.click()
 
         nameSRC = driver.page_source
+        name = "N/A"
         if "ctl00_ContentPlaceHolder1_NameLinkButton" in nameSRC:
             nameLoc = nameSRC.find('''href="javascript:__doPostBack('ctl00$ContentPlaceHolder1$NameLinkButton','')">''')
             name = nameSRC[nameLoc:nameLoc + 140]
@@ -220,6 +225,7 @@ if main_menu_choice=='1':
             name = name.replace(" ", "-", 1)
             name = name.replace(" ", "", -1)
             name = name.replace("-", " ")
+
 
         # print("name:", name)
 #    print(response.content)
@@ -281,7 +287,7 @@ if "Sprint" in carrier:
 if valid_confirm_loop=='valid':
     clear()
     if country_code == "+1":
-        print("Name: " + name)
+        print("Name:", name)
     else:
         print("Name: not yet supported for international numbers")
     print(country_code+ " " + phone_number)
